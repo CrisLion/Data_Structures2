@@ -91,7 +91,23 @@ namespace SortingAlgorithms{
             quickSort(vec, compare ,low, pi - 1);
             quickSort(vec, compare ,pi + 1, high);
         }
-
     }
 
+    template<typename T>
+    T quickSelect(std::vector<T>& vec, bool (*compare)(const T&,const T&), int low, int high, int k){
+        if (low == high) return vec[low];
+
+        int index = partition(vec,compare,low,high);
+        int len = index - low +1;
+
+        if (k == len) return vec[index];
+
+        else if (k < len){
+            return quickSelect(vec,compare,low,index-1,k);
+        }
+
+        else{
+            return quickSelect(vec,compare,index+1,high,k-len);
+        }
+    }
 }
