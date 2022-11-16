@@ -110,4 +110,35 @@ namespace SortingAlgorithms{
             return quickSelect(vec,compare,index+1,high,k-len);
         }
     }
+    
+    template <typename T>
+    void heapify(std::vector<T>& arr, bool (*compare)(const T&, const T&), int size ,int i) {
+
+        int left = 2*i+1;
+        int right = 2*i+2; 
+        int selected = i;
+
+        if (left < size && compare(arr[left], arr[selected])) // for minheapify: _arr[left] < _arr[smaller]
+            selected = left;                                  // for maxheapify: _arr[left] > _arr[smaller]
+
+        if (right < size && compare(arr[right], arr[selected])) // for minheapify: _arr[right] < _arr[smaller]
+            selected = right;                                   // for maxheapify: _arr[right] > _arr[smaller]
+    
+        if (selected != i){
+            swap(arr[selected], arr[i]);
+            heapify(arr, compare, size, selected);
+        }
+    }
+
+    template <typename T>
+    void heapSort(std::vector<T>& arr, bool (*compare)(const T&, const T&)) {
+        for (int i = arr.size() / 2 - 1; i >= 0; i--){
+            heapify(arr, compare, arr.size(), i);
+        }
+    
+        for (int i = arr.size() - 1; i > 0; i--) {
+            swap(arr[0], arr[i]);
+            heapify(arr, compare, i ,0);
+        }
+    }
 }
