@@ -1,15 +1,14 @@
-#pragma once
 #include <iostream>
 #include <string>
 #include <list>
 #include <cmath>
 
-template <typename T>
+template <typename K , typename T>
 class HashTable { //Not resizable
 private:
     
     struct Element{
-        std::string key;
+        K key;
         T value;
     };
 
@@ -50,6 +49,23 @@ private:
         return floor(fractPart*_capacity);        
     }
 
+    size_t _hashFunction(const int& key){
+        long double res = 0;
+        long double fractPart;
+
+        int digitCount = log10(key)+1;
+
+        while (digitCount){
+            res += pow(key,(digitCount)/5.f);
+            digitCount--;
+        }
+
+        fractPart = static_cast<long double>(res)*c_A;
+        fractPart = fractPart - floor(fractPart);
+
+        return floor(fractPart*_capacity);        
+    }
+
 public:
     HashTable(size_t capacity, void (*show)(const T&)) : _size(0), _show(show) {
 
@@ -79,7 +95,7 @@ public:
         return _size;
     }
     
-    void insert(const std::string& key, const T& value){
+    void insert(const K& key, const T& value){
 
         size_t index = _hashFunction(key);
 
@@ -91,7 +107,7 @@ public:
         ++_size;
     }
 
-    T& operator[] (const std::string& key){ //Just for searching given a key. If the key does not exist, It will throw a runtime error.
+    T& operator[] (const K& key){ //Just for searching given a key. If the key does not exist, It will throw a runtime error.
         size_t index = _hashFunction(key);
         
         for(auto iter = _arr[index]->begin(); iter != _arr[index]->end(); ++iter){
@@ -100,7 +116,7 @@ public:
         }
     }
 
-    void erase(const std::string& key){
+    void erase(const K& key){
         size_t index = _hashFunction(key);
 
         if (_arr[index] == nullptr) return;
