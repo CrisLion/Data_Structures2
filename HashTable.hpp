@@ -37,11 +37,11 @@ private:
     }
 
     size_t _hashFunction(const std::string& key){
-        size_t res = 0;
+        long double res = 0;
         long double fractPart;
 
         for(unsigned int i = 0; i < key.size(); i++){
-            res += pow(key[i],i+1);
+            res += pow(key[i],(i+1)/7.f);
         }
 
         fractPart = static_cast<long double>(res)*c_A;
@@ -68,7 +68,7 @@ public:
         for(int i = 0; i < _capacity; i++){
             if (_arr[i] != nullptr) delete _arr[i];
         }
-        delete _arr;
+        delete[] _arr;
     }
 
     size_t get_capacity(){
